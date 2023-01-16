@@ -14,13 +14,14 @@ export default class Scene {
 
   addEvents() {
     window.addEventListener("resize", () => this.onWindowResize);
+    window.addEventListener('keydown', this.handleKeyDown);
+    
   }
 
   init() {
     // Initialise the physics world
     this.world = new CANNON.World();
     this.world.gravity.set(0, 0, -9.82);
-
     // Create the THREE Scene
     this.scene = new THREE.Scene();
     this.scene.fog = new THREE.FogExp2(0x666c75, 0.05);
@@ -30,7 +31,6 @@ export default class Scene {
     this.addObjects();
     this.setRenderer();
     this.orbiteControl();
-
   }
 
   setRenderer() {
@@ -47,7 +47,7 @@ export default class Scene {
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     this.renderer.shadowMap.enabled = true;
     this.renderer.setAnimationLoop(() => {
-      this.render();
+    this.render();
      
     }); // Render 60 fps
     
@@ -70,6 +70,11 @@ export default class Scene {
     this.hemiLight = new THREE.HemisphereLight(0xa0cad9, 0xf2dfc9, 0.5);
     this.hemiLight.position.set(0, 10000, 50);
     this.scene.add(this.hemiLight);
+    
+    this.hemiLight2 = new THREE.HemisphereLight(0xa0cad9, 0xf2dfc9, 0.3);
+    this.hemiLight2.position.set(0, 1000, 11150);
+    this.hemiLight2.visible=false;
+    this.scene.add(this.hemiLight2);
 
     // Directional light
     this.dirLight = new THREE.DirectionalLight(0xffe5c9, 1.5);
@@ -81,6 +86,10 @@ export default class Scene {
     this.dirLight.shadow.mapSize.height = 1024 * 4;
     this.scene.add(this.dirLight);
   }
+
+ 
+
+
 //   onDocumentMouseMove( ) {
    
 
@@ -123,6 +132,8 @@ export default class Scene {
     // New instance of the car
     this.AirPlane = new AirPlane(this.scene);
     this.ground = new Ground(this.scene);
+    console.log(this.AirPlane.scene.children);
+    // this.AirPlane.scene.children[2].children[2].visible=false;
   }
 
   render() {
@@ -132,7 +143,7 @@ export default class Scene {
       this.AirPlane.scene.position.z
     );
 
-    this.AirPlane.scene.rotation.y += 0.01;
+    // this.AirPlane.scene.rotation.y += 0.01;
     
     this.renderer.render(this.scene, this.camera);    
     this.controls.update();
@@ -172,6 +183,35 @@ export default class Scene {
     this.camera.aspect = window.innerWidth / window.innerHeight;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(window.innerWidth, window.innerHeight);
+  }
+
+  handleKeyDown = (event) => {
+    switch (event.code) {
+      case 'KeyB':
+        this.AirPlane.scene.children[4].children[0].material.color.r=0.1;
+        this.AirPlane.scene.children[4].children[0].material.color.g=0.1;
+        this.AirPlane.scene.children[4].children[0].material.color.b=0.7;
+        break;
+      case 'KeyR':
+        this.AirPlane.scene.children[4].children[0].material.color.g=0.05;
+        this.AirPlane.scene.children[4].children[0].material.color.r=0.8;
+        this.AirPlane.scene.children[4].children[0].material.color.b=0.1;
+        break;
+      case 'KeyG':
+        this.AirPlane.scene.children[4].children[0].material.color.g=0.6;
+        this.AirPlane.scene.children[4].children[0].material.color.r=0.1;
+        this.AirPlane.scene.children[4].children[0].material.color.b=0.5;
+        break;
+      case 'KeyP':
+        this.AirPlane.scene.children[4].children[3].visible?(this.AirPlane.scene.children[4].children[3].visible=false):(this.AirPlane.scene.children[4].children[3].visible=true);
+        this.AirPlane.scene.children[4].children[2].visible?(this.AirPlane.scene.children[4].children[2].visible=false):(this.AirPlane.scene.children[4].children[2].visible=true);
+        break;
+      case 'KeyL':
+        this.hemiLight2.visible?this.hemiLight2.visible=false:this.hemiLight2.visible=true;
+        break;
+      default:
+        break;
+    }
   }
 }
 

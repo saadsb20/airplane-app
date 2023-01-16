@@ -25,7 +25,6 @@ export default class AirPlane {
                   n.material[2] = this.windowMat;
                 }
               });
-      
               obj.scale.set(0.03, 0.03, 0.03);
               obj.position.set(0, 0, 0);
               console.log("Object", obj);
