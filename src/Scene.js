@@ -3,6 +3,7 @@ import * as CANNON from "cannon";
 import Ground from "./Ground";
 import AirPlane from "./Airplane";
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { DragControls } from 'three/addons/controls/DragControls.js';
 
 
 export default class Scene {
@@ -31,6 +32,7 @@ export default class Scene {
     this.addObjects();
     this.setRenderer();
     this.orbiteControl();
+    this.dragControl();
   }
 
   setRenderer() {
@@ -106,43 +108,9 @@ export default class Scene {
     
     this.renderer.render(this.scene, this.camera);    
     this.controls.update();
-    // this.keyBoardControl();
-    // this.selectobject()
 
     
   }
-  // keyBoardControl() {
-  //   document.onkeydown = (e) => {
-  //     switch (e.keyCode) {
-  //       case 37:
-  //       this.AirPlane.scene.rotation.y += 0.1;
-  //       break;
-  //       case 38:
-  //       this.AirPlane.scene.rotation.x -= 0.1;
-  //       break;
-  //       case 39:
-  //       this.AirPlane.scene.rotation.y -= 0.1;
-  //       break;
-  //       case 40:
-  //       this.AirPlane.scene.rotation.x += 0.1;
-  //       break;
-  //       case 90:
-  //       this.AirPlane.scene.children[3].position.z += 0.1;
-  //       break;
-  //       case 81:
-  //       this.AirPlane.scene.children[3].position.x += 0.1;
-  //       this.AirPlane.scene.children[3].rotation.z -= 0.1;
-  //       break;
-  //       case 83:
-  //       this.AirPlane.scene.children[3].position.z -= 0.1;
-  //       break;
-  //       case 68:
-  //       this.AirPlane.scene.children[3].position.x -= 0.1;
-  //       this.AirPlane.scene.children[3].rotation.z += 0.1;
-  //       break;
-  //     }
-  //   };
-  // }
 
   orbiteControl(){
     this.controls = new OrbitControls( this.camera, this.renderer.domElement );
@@ -150,6 +118,21 @@ export default class Scene {
     this.controls.enablePan = false;
     this.controls.enableDamping = true;
   }
+  dragControl(){
+    this.controls1 = new DragControls( this.AirPlane,this.camera, this.renderer.domElement );
+    this.controls1.addEventListener( 'dragstart', function ( event ) {
+
+      event.object.material.emissive.set( 0xaaaaaa );
+    
+    } );
+    
+    this.controls1.addEventListener( 'dragend', function ( event ) {
+    
+      event.object.material.emissive.set( 0x000000 );
+    
+    } );
+  }
+
 
   onWindowResize() {
     this.camera.aspect = window.innerWidth / window.innerHeight;
