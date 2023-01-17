@@ -61,7 +61,7 @@ export default class Scene {
       0.1,
       10000
     );
-    this.camera.position.set(0, 5, 10);
+    this.camera.position.set(0, 2, -10);
     
   }
 
@@ -81,46 +81,9 @@ export default class Scene {
     this.dirLight.shadow.mapSize.height = 1024 * 4;
     this.scene.add(this.dirLight);
   }
-//   onDocumentMouseMove( ) {
-   
-
-//     // event.preventDefault();
-
-//     // if ( this.isMouseDown ) {
-
-//     //     let theta = - ( ( event.clientX - this.onMouseDownPosition.x ) * 0.5 )
-//     //             + this.onMouseDownTheta;
-//     //     let phi = ( ( event.clientY - this.onMouseDownPosition.y ) * 0.5 )
-//     //           + this.onMouseDownPhi;
-
-//     //     phi = Math.min( 180, Math.max( 0, phi ) );
-
-//     //     this.camera.position.x = this.radious * Math.sin( theta * Math.PI / 360 )
-//     //                         * Math.cos( phi * Math.PI / 360 );
-//     //     this.camera.position.y = this.radious * Math.sin( phi * Math.PI / 360 );
-//     //     this.camera.position.z = this.radious * Math.cos( theta * Math.PI / 360 )
-//     //                         * Math.cos( phi * Math.PI / 360 );
-//     //     this.camera.updateMatrix();
-
-//     // }
-
-//     // var mouse3D = this.projector.unprojectVector(
-//     //     new THREE.Vector3(
-//     //         ( event.clientX / this.renderer.domElement.width ) * 2 - 1,
-//     //         - ( event.clientY / this.renderer.domElement.height ) * 2 + 1,
-//     //         0.5
-//     //     ),
-//     //     this.camera
-//     // );
-//     // this.ray.direction = mouse3D.subSelf( this.camera.position ).normalize();
-
-//     // this.interact();
-//     // this.render();
-
-// }
 
   addObjects() {
-    // New instance of the car
+    // New instance of the airplane
     this.AirPlane = new AirPlane(this.scene);
     this.ground = new Ground(this.scene);
   }
@@ -132,41 +95,53 @@ export default class Scene {
       this.AirPlane.scene.position.z
     );
 
-    this.AirPlane.scene.rotation.y += 0.01;
-    
+    // this.AirPlane.scene.rotation.y += 0.01; 
     this.renderer.render(this.scene, this.camera);    
     this.controls.update();
+    this.keyBoardControl();
     // this.selectobject()
+
+    
+  }
+  keyBoardControl() {
+    document.onkeydown = (e) => {
+      switch (e.keyCode) {
+        case 37:
+        this.AirPlane.scene.rotation.y += 0.1;
+        break;
+        case 38:
+        this.AirPlane.scene.rotation.x -= 0.1;
+        break;
+        case 39:
+        this.AirPlane.scene.rotation.y -= 0.1;
+        break;
+        case 40:
+        this.AirPlane.scene.rotation.x += 0.1;
+        break;
+        case 90:
+        this.AirPlane.scene.children[3].position.z += 0.1;
+        break;
+        case 81:
+        this.AirPlane.scene.children[3].position.x += 0.1;
+        this.AirPlane.scene.children[3].rotation.z -= 0.1;
+        break;
+        case 83:
+        this.AirPlane.scene.children[3].position.z -= 0.1;
+        break;
+        case 68:
+        this.AirPlane.scene.children[3].position.x -= 0.1;
+        this.AirPlane.scene.children[3].rotation.z += 0.1;
+        break;
+      }
+    };
   }
 
   orbiteControl(){
     this.controls = new OrbitControls( this.camera, this.renderer.domElement );
-    this.controls.target.set( 0, 0.5, 0 );
-    
+    this.controls.target.set( 0, 0.5, 0 ); 
     this.controls.enablePan = false;
     this.controls.enableDamping = true;
   }
-
-//   selectobject(){
-//     let draggableObject;
-//     window.addEventListener('click', event => {
-//         // If 'holding' object on-click, set container to <undefined> to 'drop’ the object.
-//         if (draggableObject) {
-//           draggableObject= undefined;
-//           return;
-//         }
-      
-//         // If NOT 'holding' object on-click, set container to <object> to 'pick up' the object.
-//         this.clickMouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-//         this.clickMouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
-//         this.raycaster.setFromCamera(this.clickMouse, this.camera);
-//         const found = this.raycaster.intersectObjects(this.scene.children, true);
-//         if (found.length && found[0].object.isDraggable) {
-//           draggableObject = found[0].object;
-//           console.log(draggableObject)
-//         }
-//       });
-//   }
 
   onWindowResize() {
     this.camera.aspect = window.innerWidth / window.innerHeight;

@@ -11,11 +11,11 @@ export default class AirPlane {
   load() {
     var mtlLoader = new MTLLoader();
     mtlLoader.setMaterialOptions({side:THREE.DoubleSide});
-    mtlLoader.load(process.env.PUBLIC_URL+"/airplane_object/airplane1.mtl", materials => {
+    mtlLoader.load(process.env.PUBLIC_URL+"/airplane_object/airplane5.mtl", materials => {
         materials.preload();
         const objLoader = new OBJLoader();
         objLoader.setMaterials(materials);
-        objLoader.load(process.env.PUBLIC_URL+"/airplane_object/airplane1.obj", obj => {
+        objLoader.load(process.env.PUBLIC_URL+"/airplane_object/airplane5.obj", obj => {
             obj.traverse((n) => {
                 if (n.isMesh) {
                   n.castShadow = true;
@@ -28,7 +28,6 @@ export default class AirPlane {
       
               obj.scale.set(0.03, 0.03, 0.03);
               obj.position.set(0, 0, 0);
-              console.log("Object", obj);
               this.scene.add(obj);
             },
             (xhr) => console.log((xhr.loaded / xhr.total) * 100 + "% loaded"),
